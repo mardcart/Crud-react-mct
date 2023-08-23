@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CrudForm from "./CrudForm";
-import CrudTable from "./CrudTablle";
+import CrudTable from "./CrudTable";
 
 const initialBD= [
     {
@@ -24,21 +24,30 @@ const CrudApp =()=>{
     const [Db, setDb] = useState(initialBD)
     const [DataToEdit, setDataToEdit] = useState(null)
 
-    const createData = ()=>{
-
+    const createData = (data)=>{
+        Db.id =  Date.now();
+        setDb([...Db,data])
     }
-    const updateData =()=>{
-
+    const updateData =(data)=>{
+        let newData = Db.map(el=>el.id === data.id?data:el)
+        setDb(newData) 
     }
-    const deleteData =()=>{
+    const deleteData =(id)=>{
+        let isDelete =  window.confirm(`deseas eliminar los datos de '${id}'`)
+        if(isDelete){
+            let newData = Db.filter(el => el.id !== id)
+            setDb(newData)
+        }else{
+            return;
+        }
 
     }
 
     return (
         <div>
         <h2>crud app</h2>
-        <CrudForm/>
-        <CrudTable/>
+        <CrudForm createData={createData} updateData={updateData} DataToEdit={DataToEdit} setDataToEdit={setDataToEdit}/>
+        <CrudTable deleteData={deleteData} Db={Db} setDataToEdit={setDataToEdit}/>
         </div>
     )
 }

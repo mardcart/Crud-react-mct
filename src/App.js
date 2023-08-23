@@ -1,9 +1,11 @@
 import './App.css';
+import CrudApp from './Componentes/CrudApp';
 
 function App() {
   return (
-    <div className="App">
-      <h2>hola como estas</h2>
+    <div>
+      <h2>CRUD APP CON JON MIRCHA</h2>
+      <CrudApp/>
     </div>
   );
 }

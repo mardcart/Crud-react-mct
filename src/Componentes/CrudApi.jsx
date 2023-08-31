@@ -13,7 +13,7 @@ const CrudApi =()=>{
     const [Error, setError] = useState(null)
     const [Loading, setLoading] = useState(false)
 
-  //  let api = HelpHttp();
+    let api = HelpHttp();
     let url =  "http://localhost:5000/usuarios";
 
     //APARA LEVANTAR EL SERVIDO NPM RUN FAKE-API
@@ -38,8 +38,24 @@ const CrudApi =()=>{
 
 
     const createData =(data)=>{
+        // data.id = Date.now();
+        // setDb([...Db,data])
+        
         data.id = Date.now();
-        setDb([...Db,data])
+        let options = {
+            body:data,
+            headers: {"content-type":"application/json"}
+        }
+        
+        api.post(url,options).then((res)=>{
+            console.log(res)
+            if(!res.err){
+                setDb([...Db,res]);
+            }else{
+                setError(res)
+            }
+        })      
+
     }
     const updateData =(data)=>{
         let newData =  Db.map(el=>el.id === data.id?data:el)

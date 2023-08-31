@@ -1,12 +1,41 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import CrudForm from "./CrudForm"
 import CrudTable from "./CrudTable"
+import { HelpHttp } from "../Helpers/HelpHttp";
+import Message from "./Message";
 
 const CrudApi =()=>{
 
-    const [Db, setDb] = useState([])
+    const [Db, setDb] = useState(null)
     const [DataToEdit, setDataToEdit] = useState(null)
+
+    const [Error, setError] = useState(null)
+    const [Loading, setLoading] = useState(false)
+
+  //  let api = HelpHttp();
+    let url =  "http://localhost:5000/usuarios";
+
+    //APARA LEVANTAR EL SERVIDO NPM RUN FAKE-API
+
+    useEffect(() => {
+        setLoading(true)
+//        api.get(url).then((res)=>{
+            HelpHttp().get(url).then((res)=>{
+           // console.log(res)
+           if(!res.err){
+            setDb(res)
+            setError(null)
+           }else{
+            setDb(null)
+            setError(res)
+           }
+        })
+        setLoading(false )
+
+    }, [url])
+    
+
 
     const createData =(data)=>{
         data.id = Date.now();
@@ -31,7 +60,10 @@ const CrudApi =()=>{
             <h2>crud api</h2>
             <article className="grid-1-2">
                 <CrudForm createData={createData} updateData={updateData} DataToEdit={DataToEdit} setDataToEdit={setDataToEdit} />
-                <CrudTable Db={Db} deleteData={deleteData} setDataToEdit={setDataToEdit}/>
+                {/* CONDITIONAL RENDER - SI TIENE ALGO LO RENDERIZAMOS */}
+                {Loading && <Loading/>}
+                {Error && <Message msg={`Error ${Error.status}: ${Error.statusText}`} bgColor="#dc3545"/>}
+                {Db &&(<CrudTable Db={Db} deleteData={deleteData} setDataToEdit={setDataToEdit}/>)}
             </article>
         </div>
     )

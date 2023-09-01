@@ -4,6 +4,7 @@ import CrudForm from "./CrudForm"
 import CrudTable from "./CrudTable"
 import { HelpHttp } from "../Helpers/HelpHttp";
 import Message from "./Message";
+import Loader from "./Loader"
 
 const CrudApi =()=>{
 
@@ -90,7 +91,7 @@ const CrudApi =()=>{
                 if(!res.err){
                     let newData = Db.filter(el=>el.id !== id)
                     setDb(newData)
-                }else{return;}
+                }else{return}
             })
             // let newData =  Db.filter(el=>el.id !== id)
             // setDb(newData)
@@ -105,7 +106,7 @@ const CrudApi =()=>{
             <article className="grid-1-2">
                 <CrudForm createData={createData} updateData={updateData} DataToEdit={DataToEdit} setDataToEdit={setDataToEdit} />
                 {/* CONDITIONAL RENDER - SI TIENE ALGO LO RENDERIZAMOS */}
-                {Loading && <Loading/>}
+                {Loading && <Loader/>}
                 {Error && <Message msg={`Error ${Error.status}: ${Error.statusText}`} bgColor="#dc3545"/>}
                 {Db &&(<CrudTable Db={Db} deleteData={deleteData} setDataToEdit={setDataToEdit}/>)}
             </article>

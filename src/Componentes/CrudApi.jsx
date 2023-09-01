@@ -58,14 +58,42 @@ const CrudApi =()=>{
 
     }
     const updateData =(data)=>{
-        let newData =  Db.map(el=>el.id === data.id?data:el)
-        setDb(newData)
+        //let newData =  Db.map(el=>el.id === data.id?data:el)
+        //setDb(newData)
+        let endpoint = `${url}/${data.id}`
+        //console.log(endpoint)
+        let options = {
+            body:data,
+            headers: {"content-type":"application/json"}
+        }
+        api.put(endpoint,options).then((res)=>{
+            if(!res.err){
+                let newData = Db.map(el=>el.id === data.id?data:el)
+                setDb(newData)
+            }else{
+                setError(res)
+            }
+        })
+
+
+
+
     }
     const deleteData =(id)=>{
         let isdelete =  window.confirm(`deseas eliminar el "${id}"`)
         if(isdelete){
-            let newData =  Db.filter(el=>el.id !== id)
-            setDb(newData)
+            let endpoint = `${url}/${id}`
+            let options = {
+                headers: {"content-type":"application/json"}
+            }
+            api.del(endpoint,options).then(res=>{
+                if(!res.err){
+                    let newData = Db.filter(el=>el.id !== id)
+                    setDb(newData)
+                }else{return;}
+            })
+            // let newData =  Db.filter(el=>el.id !== id)
+            // setDb(newData)
         }else{
             return;
         }
